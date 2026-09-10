@@ -302,7 +302,6 @@ def download_jar(url, ssl_cert=""):
         if partial_destination and os.path.isfile(partial_destination):
             os.remove(partial_destination)
 
-
 # LOAD-39125: CheckVU CLI JVM flags. Passed on the java command line only — not JAVA_TOOL_OPTIONS
 # (the Load Generator child process would inherit them).
 CHECKVU_VM_OPTIONS = [
@@ -312,14 +311,15 @@ CHECKVU_VM_OPTIONS = [
     "-XX:+UseSerialGC",
 ]
 
-
-def build_command(java, jar, project_file, user_path=None,
+def build_command(java, jar, project_file, user_path=None, play_think_time=False,
                   controller_properties=None, load_generator_properties=None,
                   app_proxy=None, app_proxy_username=None, app_proxy_bypass=None,
                   output=None, work_dir=None, keep_temp_work_dir=False):
     command = [java] + CHECKVU_VM_OPTIONS + ["-jar", jar]
     if user_path:
         command.extend(["--user-path", user_path])
+    if play_think_time:
+        command.append("--play-think-time")
     if controller_properties:
         command.extend(["--controller-properties", controller_properties])
     if load_generator_properties:
